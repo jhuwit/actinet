@@ -203,7 +203,7 @@ actinet = function(
 
   if (!is.null(exclude_wear_below)) {
     exclude_wear_below = shQuote(exclude_wear_below)
-    exclude_wear_below = paste0("--require-sleep-above=", exclude_wear_below)
+    exclude_wear_below = paste0("--exclude-wear-below=", exclude_wear_below)
     args = c(args, exclude_wear_below)
   }
 
@@ -306,9 +306,7 @@ transform_data_to_files = function(file, verbose = TRUE) {
     tfile = tempfile(fileext = ".csv")
     file = sc_write_csv(data = file, path = tfile)
     attr(file, "remove_file") = TRUE
-  }
-
-  if (
+  } else if (
     # a list of files
     (is.character(file) &&
      all(sapply(file, assertthat::is.readable))) ||
@@ -329,4 +327,3 @@ transform_data_to_files = function(file, verbose = TRUE) {
   }
   return(file)
 }
-

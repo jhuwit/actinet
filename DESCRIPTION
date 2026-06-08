@@ -18,8 +18,7 @@ Imports:
     assertthat,
     magrittr,
     readr,
-    reticulate (>= 1.42.0),
-    rlang
+    reticulate (>= 1.42.0)
 Suggests: 
     tidyr,
     dplyr,

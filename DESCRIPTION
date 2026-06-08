@@ -1,6 +1,6 @@
 Package: actinet
 Title: Estimate Human Activity from 'Accelerometry' Data
-Version: 0.5.0
+Version: 0.1.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",

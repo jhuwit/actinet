@@ -164,6 +164,115 @@ test_that("actinet_version delegates to module_version", {
   expect_equal(actinet_version(), "actinet-version")
 })
 
+test_that("classifier helpers return expected model metadata", {
+  expect_equal(
+    actinet:::ac_classifier("walmsley"),
+    "ssl-ukb-c24-rw-30s-20260128"
+  )
+  expect_equal(
+    actinet:::ac_classifier("willetts"),
+    "ssl-ukb-c24-mw-30s-20260128"
+  )
+  expect_equal(
+    actinet:::ac_model_md5("walmsley"),
+    "a829041ba84b18084b4b2897fb1b36a6"
+  )
+  expect_equal(
+    actinet:::ac_model_md5("willetts"),
+    "59a9492b50ee922c7a31f88888c5f14b"
+  )
+  expect_equal(
+    ac_model_filename("walmsley"),
+    "ssl-ukb-c24-rw-30s-20260128.joblib.lzma"
+  )
+})
+
+test_that("check_versions validates Python classifier metadata", {
+  testthat::local_mocked_bindings(
+    import = function(module, convert = TRUE) {
+      expect_equal(module, "actinet.__init__")
+      expect_true(convert)
+      list(
+        `__classifiers__` = list(
+          walmsley = list(
+            version = "ssl-ukb-c24-rw-30s-20260128",
+            md5 = "a829041ba84b18084b4b2897fb1b36a6"
+          ),
+          willetts = list(
+            version = "ssl-ukb-c24-mw-30s-20260128",
+            md5 = "59a9492b50ee922c7a31f88888c5f14b"
+          )
+        )
+      )
+    },
+    .package = "reticulate"
+  )
+
+  expect_no_error(actinet:::check_versions())
+})
+
+test_that("ac_load_model imports and loads classifier paths", {
+  captured = NULL
+
+  testthat::local_mocked_bindings(
+    import = function(module, convert = TRUE) {
+      expect_equal(module, "actinet.actinet")
+      expect_false(convert)
+      list(load_classifier = function(model_repo_path, classifier, force_download) {
+        captured <<- list(
+          model_repo_path = model_repo_path,
+          classifier = classifier,
+          force_download = force_download
+        )
+        "model"
+      })
+    },
+    .package = "reticulate"
+  )
+
+  model_path = tempfile()
+  expect_equal(
+    ac_load_model("willetts", model_path = model_path, force_download = TRUE),
+    "model"
+  )
+  expect_equal(captured$model_repo_path, path.expand(model_path))
+  expect_equal(captured$classifier, "willetts")
+  expect_true(captured$force_download)
+
+  expect_equal(ac_load_model("walmsley", as_python = FALSE), "model")
+  expect_match(captured$model_repo_path, "walmsley\\.joblib\\.lzma$")
+})
+
+test_that("ac_download_model downloads and verifies checksums", {
+  captured = NULL
+  model_path = tempfile()
+
+  testthat::local_mocked_bindings(
+    curl_download = function(url, destfile) {
+      captured <<- list(url = url, destfile = destfile)
+      writeLines("model", destfile)
+      destfile
+    },
+    .package = "curl"
+  )
+  testthat::local_mocked_bindings(
+    md5sum = function(files) {
+      stats::setNames("a829041ba84b18084b4b2897fb1b36a6", files)
+    },
+    .package = "tools"
+  )
+
+  expect_equal(ac_download_model(model_path, classifier = "walmsley"), model_path)
+  expect_match(captured$url, "ssl-ukb-c24-rw-30s-20260128\\.joblib\\.lzma$")
+  expect_equal(captured$destfile, model_path)
+
+  testthat::local_mocked_bindings(
+    md5sum = function(files) stats::setNames("not-the-md5", files),
+    .package = "tools"
+  )
+  expect_error(ac_download_model(model_path, classifier = "walmsley"))
+})
+
 test_that("actinet builds CLI arguments and returns output paths", {
   captured = NULL
   input = tempfile(fileext = ".csv")

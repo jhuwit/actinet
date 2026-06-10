@@ -213,11 +213,12 @@ test_that("check_versions validates Python classifier metadata", {
 
 test_that("ac_load_model imports and loads classifier paths", {
   captured = NULL
+  convert_values = NULL
 
   testthat::local_mocked_bindings(
     import = function(module, convert = TRUE) {
       expect_equal(module, "actinet.actinet")
-      expect_false(convert)
+      convert_values <<- c(convert_values, convert)
       list(load_classifier = function(model_repo_path, classifier, force_download) {
         captured <<- list(
           model_repo_path = model_repo_path,
@@ -240,6 +241,7 @@ test_that("ac_load_model imports and loads classifier paths", {
   expect_true(captured$force_download)
 
   expect_equal(ac_load_model("walmsley", as_python = FALSE), "model")
+  expect_equal(convert_values, c(FALSE, TRUE))
   expect_match(captured$model_repo_path, "walmsley\\.joblib\\.lzma$")
 })
 

@@ -85,7 +85,8 @@ Run Actinet Model on Data
   file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
   if (actinet_check()) {
     out = actinet(file = file)
-    st = out$step_times
+    data = readr::read_csv(out$outfiles[1])
+    daily_data = readr::read_csv(out$outfiles[3])
   }
 }
 

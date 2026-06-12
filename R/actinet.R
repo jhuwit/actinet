@@ -275,7 +275,7 @@ actinet = function(
     args = args,
     python_version = "3.10"
   )
-  stopifnot(out == 1L)
+  stopifnot(out == 0L)
 
   bn = as.character(resolve_path(file)[[2]])
   real_outdir = file.path(outdir, bn, fsep = "/")

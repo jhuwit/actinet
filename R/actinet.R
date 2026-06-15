@@ -292,6 +292,33 @@ actinet = function(
     outdir = real_outdir,
     outfiles = outfiles
   )
+  out_data = list(
+    time_series = try({
+      df = readr::read_csv(outfiles[1], guess_max = Inf, show_col_types = FALSE,
+                           progress = FALSE)
+      readr::stop_for_problems(df)
+      df
+    }, silent = TRUE),
+
+    summary = try({
+      js = reticulate::import("json")
+      builtins = reticulate::import_builtins()
+      con = builtins$open(outfiles[2], mode = "r")
+      on.exit(con$close())
+      data = js$load(con)
+      con$close()
+      data
+
+    }, silent = TRUE),
+
+    daily_summary = try({
+      df = readr::read_csv(outfiles[3], guess_max = Inf, show_col_types = FALSE,
+                           progress = FALSE)
+      readr::stop_for_problems(df)
+      df
+    }, silent = TRUE)
+  )
+  results$data = out_data
   return(results)
 
 }

@@ -64,7 +64,7 @@ The `actinet_check` function can determine if the `actinet` module can be loaded
 actinet::actinet_check()
 ```
 
-In some cases, you ay want to set `RETICULATE_PYTHON` variable:
+In some cases, you may want to set `RETICULATE_PYTHON` variable:
 
 ```{r, eval = FALSE}
 clist = reticulate::conda_list()

@@ -81,7 +81,8 @@ null_or_true = function(x) {
 #' @param csv_start_row Row number to start reading a CSV file. Default: 1 (First row)
 #' @param csv_txyz CSV_TXYZ Column names for time, x, y, z in CSV files. Comma_ separated string. Default: 'time,x,y,z'
 #' @param csv_txyz_idxs Column indices for time,x,y,z (0_indexed, e.g., '0,1,2,3'). Overrides csv_txyz.
-#' @param csv_date_format Date time format for csv file when reading a csv file. See https://docs.python.org/3/library/datetime.html#strftime_and_strptime_format_codes for more possible codes. Default: '%Y-%m-%d %H:%M:%S.%f' (e.g. '2023-10-01 12:34:56.789')
+#' @param csv_date_format Date time format for csv file when reading a csv file. See <https://docs.python.org/3/library/datetime.html#strftime_and_strptime_format_codes>
+#' for more possible codes. Default: '%Y-%m-%d %H:%M:%S.%f' (e.g. '2023-10-01 12:34:56.789')
 #' @param calibration_stdtol_min Minimum standard deviation tolerance (g) for detecting stationary periods for calibration. Default: None
 #' @param plot_activity Plot the predicted activity labels
 #' @param cache_classifier  Download and cache classifier file and model modules for offline usage

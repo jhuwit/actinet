@@ -61,7 +61,8 @@ temporary directory}
 
 \item{csv_txyz_idxs}{Column indices for time,x,y,z (0_indexed, e.g., '0,1,2,3'). Overrides csv_txyz.}
 
-\item{csv_date_format}{Date time format for csv file when reading a csv file. See https://docs.python.org/3/library/datetime.html#strftime_and_strptime_format_codes for more possible codes. Default: '\%Y-\%m-\%d \%H:\%M:\%S.\%f' (e.g. '2023-10-01 12:34:56.789')}
+\item{csv_date_format}{Date time format for csv file when reading a csv file. See \url{https://docs.python.org/3/library/datetime.html#strftime_and_strptime_format_codes}
+for more possible codes. Default: '\%Y-\%m-\%d \%H:\%M:\%S.\%f' (e.g. '2023-10-01 12:34:56.789')}
 
 \item{calibration_stdtol_min}{Minimum standard deviation tolerance (g) for detecting stationary periods for calibration. Default: None}
 

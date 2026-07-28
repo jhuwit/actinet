@@ -56,7 +56,7 @@ actinet::actinet_check()
 #> [1] TRUE
 ```
 
-In some cases, you ay want to set `RETICULATE_PYTHON` variable:
+In some cases, you may want to set `RETICULATE_PYTHON` variable:
 
 ``` r
 clist = reticulate::conda_list()

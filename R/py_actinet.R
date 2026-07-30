@@ -28,7 +28,7 @@ py_actinet = function(
       } else {
         pyenv_function()
       }
-      res = do.call(actimetrics::acti_calculate_forest, args = args)
+      res = do.call(actinet::actinet, args = args)
     },
     args = list(...,
                 pyenv_function = pyenv_function)

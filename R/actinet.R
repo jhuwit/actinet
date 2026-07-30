@@ -342,7 +342,12 @@ actinet = function(
     }, silent = TRUE)
   )
   results$data = out_data
-  results$data_minute = actinet_minute(out_data$time_series)
+  if (
+    !is.null(out_data$time_series) &&
+    !inherits(out_data$time_series, "try-error")
+  ) {
+    results$data_minute = actinet_minute(out_data$time_series)
+  }
   return(results)
 
 }

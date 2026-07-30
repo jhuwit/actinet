@@ -61,6 +61,28 @@ null_or_true = function(x) {
 }
 
 
+
+actinet_minute = function(time_series) {
+  `moderate-vigorous` = time = NULL
+  rm(list = c("time", "moderate-vigorous"))
+  mean_na = function(...) {
+    mean(..., na.rm = TRUE)
+  }
+  time_series |>
+    dplyr::group_by(time) |>
+    dplyr::rename(moderate_vigorous = `moderate-vigorous`) |>
+    dplyr::mutate(time = lubridate::floor_date(time, "1 minute")) |>
+    dplyr::group_by(time) |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::any_of(c("light", "moderate_vigorous", "sedentary", "sleep")),
+        mean_na
+      )
+    )
+}
+
+
+
 #' Run Actinet Model on Data
 #'
 #' @param file accelerometry file to process, including CSV,
@@ -320,6 +342,7 @@ actinet = function(
     }, silent = TRUE)
   )
   results$data = out_data
+  results$data_minute = actinet_minute(out_data$time_series)
   return(results)
 
 }

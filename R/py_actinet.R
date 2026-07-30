@@ -23,7 +23,7 @@ py_actinet = function(
     show = show,
     func = function(..., pyenv_function) {
       args = list(...)
-      if ("args" %in% formalArgs(pyenv_function)) {
+      if ("args" %in% methods::formalArgs(pyenv_function)) {
         args = pyenv_function(args)
       } else {
         pyenv_function()

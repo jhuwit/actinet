@@ -8,7 +8,7 @@ py_require_actinet = function(...) {
   reticulate::py_require(
     c("actinet==0.7.2",
       "torch==2.8.0",
-      "torchvision==0.23.0")
+      "torchvision==0.23.0"),
     python_version = "3.10",
     ...)
 }

@@ -1,3 +1,8 @@
+# actinet 0.3.0
+
+* Small fixes for CRAN with DESCRIPTION
+* Added real `actinet` test in `testthat` tests.
+
 # actinet 0.2.0
 
 * Adding in actually reading the data out as an element in the list.

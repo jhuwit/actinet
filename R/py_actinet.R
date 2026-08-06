@@ -2,9 +2,9 @@
 #'
 #' @param ... arguments to pass to [actinet::actinet]
 #' @param pyenv_function function that loads the forest Python package.
-#' By default, it uses reticulate::py_import("actinet") to import
+#' By default, it uses  `reticulate::py_import("actinet")` to import
 #' the package. If this function has an args argument, the output of
-#' pyenv_function will be re-assigned to args.
+#' `pyenv_function` will be re-assigned to args.
 #' @param show Logical, whether to show the standard output on the
 #' screen while the child process is running, passed to [callr::r()]
 #'
@@ -13,8 +13,9 @@
 py_actinet = function(
     ...,
     pyenv_function = function() {
-      reticulate::py_require("actinet==0.7.2", python_version = "3.10")
-      reticulate::import("actinet")
+      actinet::py_require_actinet()
+      # reticulate::py_require("actinet==0.7.2", python_version = "3.10")
+      # reticulate::import("actinet")
     },
     show = FALSE
 ) {

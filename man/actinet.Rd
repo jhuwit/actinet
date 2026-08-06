@@ -31,9 +31,7 @@ actinet(
 py_actinet(
   ...,
   pyenv_function = function() {
-     reticulate::py_require("actinet==0.7.2",
-    python_version = "3.10")
-     reticulate::import("actinet")
+     actinet::py_require_actinet()
  },
   show = FALSE
 )
@@ -86,9 +84,9 @@ for more possible codes. Default: '\%Y-\%m-\%d \%H:\%M:\%S.\%f' (e.g. '2023-10-0
 \item{...}{arguments to pass to \link{actinet}}
 
 \item{pyenv_function}{function that loads the forest Python package.
-By default, it uses reticulate::py_import("actinet") to import
+By default, it uses  \code{reticulate::py_import("actinet")} to import
 the package. If this function has an args argument, the output of
-pyenv_function will be re-assigned to args.}
+\code{pyenv_function} will be re-assigned to args.}
 
 \item{show}{Logical, whether to show the standard output on the
 screen while the child process is running, passed to \code{\link[callr:r]{callr::r()}}}
@@ -104,13 +102,22 @@ Run Actinet Model on Data
 Run \code{actinet} with Python
 }
 \examples{
+actinet_check_result = function() {
+  res = try({suppressWarnings(actinet_check())})
+  if (inherits(res, "try-error")) {
+    res = FALSE
+  }
+  res
+}
 \donttest{
   library(magrittr)
   file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
-  if (actinet_check()) {
-    out = actinet(file = file)
-    data = readr::read_csv(out$outfiles[1])
-    daily_data = readr::read_csv(out$outfiles[3])
+  if (actinet_check_result()) {
+    out = try({actinet(file = file)})
+    if (!inherits(out, "try-error")) {
+      data = readr::read_csv(out$outfiles[1])
+      daily_data = readr::read_csv(out$outfiles[3])
+    }
   }
 }
 

@@ -119,13 +119,22 @@ actinet_minute = function(time_series) {
 #' @export
 #'
 #' @examples
+#' actinet_check_result = function() {
+#'   res = try({suppressWarnings(actinet_check())})
+#'   if (inherits(res, "try-error")) {
+#'     res = FALSE
+#'   }
+#'   res
+#' }
 #' \donttest{
 #'   library(magrittr)
 #'   file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
-#'   if (actinet_check()) {
-#'     out = actinet(file = file)
-#'     data = readr::read_csv(out$outfiles[1])
-#'     daily_data = readr::read_csv(out$outfiles[3])
+#'   if (actinet_check_result()) {
+#'     out = try({actinet(file = file)})
+#'     if (!inherits(out, "try-error")) {
+#'       data = readr::read_csv(out$outfiles[1])
+#'       daily_data = readr::read_csv(out$outfiles[3])
+#'     }
 #'   }
 #' }
 #'

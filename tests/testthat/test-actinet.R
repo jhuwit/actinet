@@ -398,6 +398,6 @@ test_that(".onLoad declares the Python dependency", {
 
   actinet:::.onLoad(tempdir(), "actinet")
 
-  expect_equal(captured$packages, "actinet==0.7.2")
+  expect_equal(captured$packages, c("actinet==0.7.2", "torch==2.8.0", "torchvision==0.23.0"))
   expect_equal(captured$python_version, "3.10")
 })

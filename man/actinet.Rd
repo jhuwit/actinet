@@ -33,7 +33,7 @@ py_actinet(
   pyenv_function = function() {
      actinet::py_require_actinet()
  },
-  show = FALSE
+  show = TRUE
 )
 }
 \arguments{
@@ -110,7 +110,6 @@ actinet_check_result = function() {
   res
 }
 \donttest{
-  library(magrittr)
   file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
   if (actinet_check_result()) {
     out = try({actinet(file = file)})

@@ -17,7 +17,7 @@ py_actinet = function(
       # reticulate::py_require("actinet==0.7.2", python_version = "3.10")
       # reticulate::import("actinet")
     },
-    show = FALSE
+    show = TRUE
 ) {
   rlang::check_installed("callr")
   steps <- callr::r(

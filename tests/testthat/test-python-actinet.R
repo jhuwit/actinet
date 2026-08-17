@@ -88,7 +88,8 @@ test_that("py_actinet runs the Python CLI and writes output files", {
       outdir = outdir,
       classifier = "walmsley",
       no_hmm = TRUE,
-      verbose = FALSE
+      verbose = FALSE,
+      show = TRUE
     )
   })
 

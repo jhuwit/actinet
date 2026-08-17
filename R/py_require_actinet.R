@@ -11,10 +11,19 @@ py_require_actinet = function(...) {
     ...)
 }
 
-actinet_python_packages = function() {
-  c(
-    "actinet==0.7.2",
-    "torch>=1.13,<3",
-    "torchvision>=0.14,<1"
-  )
+actinet_python_packages = function(os_type = .Platform$OS.type) {
+  packages = "actinet==0.7.2"
+
+  # Pin this pair only on Windows, where the latest torch release can fail to
+  # load c10.dll in the GitHub Actions runner. Do not constrain macOS so uv can
+  # select the appropriate arm64 wheel for Apple Silicon.
+  if (identical(os_type, "windows")) {
+    packages = c(
+      packages,
+      "torch==2.8.0",
+      "torchvision==0.23.0"
+    )
+  }
+
+  packages
 }

@@ -275,6 +275,20 @@ test_that("ac_download_model downloads and verifies checksums", {
   expect_error(ac_download_model(model_path, classifier = "walmsley"))
 })
 
+test_that("ac_download_model reports download failures clearly", {
+  testthat::local_mocked_bindings(
+    curl_download = function(url, destfile, ...) {
+      stop("Could not resolve host")
+    },
+    .package = "curl"
+  )
+
+  expect_error(
+    ac_download_model(tempfile(), classifier = "walmsley"),
+    "Unable to download the actinet model.*Check your internet connection.*Could not resolve host"
+  )
+})
+
 test_that("actinet builds CLI arguments and returns output paths", {
   captured = NULL
   input = tempfile(fileext = ".csv")

@@ -88,7 +88,17 @@ ac_download_model = function(
   model_md5 = ac_model_md5(classifier)
   base_url = "https://wearables-files.ndph.ox.ac.uk/files/models/actinet/"
   url = paste0(base_url, model_filename)
-  curl::curl_download(url = url, destfile = model_path)
+  tryCatch(
+    curl::curl_download(url = url, destfile = model_path, ...),
+    error = function(e) {
+      stop(
+        "Unable to download the actinet model from ", url,
+        ". Check your internet connection and try again, or download the ",
+        "model manually and supply its path. Details: ", conditionMessage(e),
+        call. = FALSE
+      )
+    }
+  )
   if (check_md5) {
     file_md5 = tools::md5sum(model_path)
     stopifnot(file_md5 == model_md5)

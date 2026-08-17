@@ -35,6 +35,10 @@ jobs:
             install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
           )
           print(cov)
+          coverage <- covr::percent_coverage(cov)
+          if (coverage <= 80) {
+            stop(sprintf("Code coverage must be greater than 80%%; got %.2f%%", coverage))
+          }
           covr::to_cobertura(cov)
         shell: Rscript {0}
 

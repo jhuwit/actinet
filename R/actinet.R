@@ -127,7 +127,6 @@ actinet_minute = function(time_series) {
 #'   res
 #' }
 #' \donttest{
-#'   library(magrittr)
 #'   file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
 #'   if (actinet_check_result()) {
 #'     out = try({actinet(file = file)})

@@ -399,6 +399,65 @@ test_that("actinet validates arguments before invoking Python", {
   expect_error(actinet("missing.csv", model_path = "missing-model"))
 })
 
+test_that("py_actinet initializes Python and runs actinet in a child process", {
+  callr_args = NULL
+  pyenv_called = FALSE
+  actinet_args = NULL
+
+  testthat::local_mocked_bindings(
+    r = function(func, args, show) {
+      callr_args <<- list(args = args, show = show)
+      do.call(func, args)
+    },
+    .package = "callr"
+  )
+  testthat::local_mocked_bindings(
+    actinet = function(...) {
+      actinet_args <<- list(...)
+      "result"
+    },
+    .package = "actinet"
+  )
+
+  result = py_actinet(
+    file = "input.csv",
+    show = TRUE,
+    pyenv_function = function() pyenv_called <<- TRUE
+  )
+
+  expect_equal(result, "result")
+  expect_true(pyenv_called)
+  expect_true(callr_args$show)
+  expect_equal(callr_args$args$file, "input.csv")
+  expect_equal(actinet_args$file, "input.csv")
+})
+
+test_that("py_actinet lets a Python setup function update actinet arguments", {
+  actinet_args = NULL
+
+  testthat::local_mocked_bindings(
+    r = function(func, args, show) do.call(func, args),
+    .package = "callr"
+  )
+  testthat::local_mocked_bindings(
+    actinet = function(...) {
+      actinet_args <<- list(...)
+      invisible(NULL)
+    },
+    .package = "actinet"
+  )
+
+  py_actinet(
+    file = "input.csv",
+    pyenv_function = function(args) {
+      c(args, list(verbose = FALSE))
+    }
+  )
+
+  expect_equal(actinet_args$file, "input.csv")
+  expect_false(actinet_args$verbose)
+})
+
 test_that(".onLoad declares the Python dependency", {
   captured = NULL
 
@@ -412,6 +471,17 @@ test_that(".onLoad declares the Python dependency", {
 
   actinet:::.onLoad(tempdir(), "actinet")
 
-  expect_equal(captured$packages, c("actinet==0.7.2", "torch==2.8.0", "torchvision==0.23.0"))
+  expect_equal(captured$packages, actinet:::actinet_python_packages())
   expect_equal(captured$python_version, "3.10")
+})
+
+test_that("actinet declares the upstream PyTorch compatibility constraints", {
+  expect_equal(
+    actinet:::actinet_python_packages(),
+    c(
+      "actinet==0.7.2",
+      "torch>=1.13,<3",
+      "torchvision>=0.14,<1"
+    )
+  )
 })

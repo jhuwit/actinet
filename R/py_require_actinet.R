@@ -6,9 +6,15 @@
 #' @export
 py_require_actinet = function(...) {
   reticulate::py_require(
-    c("actinet==0.7.2",
-      "torch==2.8.0",
-      "torchvision==0.23.0"),
+    actinet_python_packages(),
     python_version = "3.10",
     ...)
+}
+
+actinet_python_packages = function() {
+  c(
+    "actinet==0.7.2",
+    "torch>=1.13,<3",
+    "torchvision>=0.14,<1"
+  )
 }

@@ -476,12 +476,18 @@ test_that(".onLoad declares the Python dependency", {
 })
 
 test_that("actinet declares the upstream PyTorch compatibility constraints", {
-  expect_equal(
-    actinet:::actinet_python_packages(),
+  expected_packages = if (identical(.Platform$OS.type, "windows")) {
     c(
       "actinet==0.7.2",
-      "torch>=1.13,<3",
-      "torchvision>=0.14,<1"
+      "torch==2.8.0",
+      "torchvision==0.23.0"
     )
+  } else {
+    "actinet==0.7.2"
+  }
+
+  expect_equal(
+    actinet:::actinet_python_packages(),
+    expected_packages
   )
 })

@@ -1,3 +1,8 @@
+# actinet 0.4.0
+
+* Added `py_require_actinet` and other reqs.
+* Added `py_actinet`.
+
 # actinet 0.3.0
 
 * Small fixes for CRAN with DESCRIPTION

@@ -298,12 +298,24 @@ test_that("actinet builds CLI arguments and returns output paths", {
   writeLines("model", model_path)
 
   testthat::local_mocked_bindings(
+    actinet_python_packages = function() {
+      c("actinet==0.7.2", "torch==2.8.0", "torchvision==0.23.0")
+    },
+    .package = "actinet"
+  )
+  testthat::local_mocked_bindings(
     import = function(module) {
       expect_equal(module, "actinet.actinet")
       list(resolve_path = function(file) list(dirname(file), "sample"))
     },
-    uv_run_tool = function(tool, args, python_version) {
-      captured <<- list(tool = tool, args = args, python_version = python_version)
+    uv_run_tool = function(tool, args, from, with, python_version) {
+      captured <<- list(
+        tool = tool,
+        args = args,
+        from = from,
+        with = with,
+        python_version = python_version
+      )
       invisible(NULL)
     },
     .package = "reticulate"
@@ -333,6 +345,11 @@ test_that("actinet builds CLI arguments and returns output paths", {
   )
 
   expect_equal(captured$tool, "actinet")
+  expect_equal(captured$from, "actinet==0.7.2")
+  expect_equal(
+    captured$with,
+    c("torch==2.8.0", "torchvision==0.23.0")
+  )
   expect_equal(captured$python_version, "3.10")
   expect_true(normalizePath(input, winslash = "/") %in% captured$args)
   expect_true(all(c(
@@ -379,7 +396,7 @@ test_that("actinet removes temporary CSV files created from data frames", {
     import = function(module) {
       list(resolve_path = function(file) list(dirname(file), "sample"))
     },
-    uv_run_tool = function(tool, args, python_version) {
+    uv_run_tool = function(tool, args, from, with, python_version) {
       captured_file <<- tail(args, 1)
       expect_true(file.exists(captured_file))
       invisible(NULL)

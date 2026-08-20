@@ -301,9 +301,12 @@ actinet = function(
   file = normalizePath(path.expand(file), winslash = "/")
   args = c(args, file)
 
+  python_packages = actinet_python_packages()
   out = reticulate::uv_run_tool(
     "actinet",
     args = args,
+    from = python_packages[[1]],
+    with = python_packages[-1],
     python_version = "3.10"
   )
   stopifnot(out == 0L)

@@ -52,9 +52,10 @@ py_actinet(
 
 - classifier:
 
-  Enter custom activity classifier file to use. Default: walmsley
-  (Walmsley2020 annotations of activity intensity). Can also enter path
-  to local classifier (.joblib.lzma) file.
+  Enter custom activity classifier file to use. Default: `walmsley`
+  (Walmsley (2020) <doi:10.1136/bjsports-2021-104050> annotations of
+  activity intensity). Can also enter path to local classifier
+  (`.joblib.lzma`) file.
 
 - sample_rate:
 
@@ -67,8 +68,8 @@ py_actinet(
 
 - pytorch_device:
 
-  torch device to use, e.g.: 'cpu' or 'cuda:0'. Default: 'mps' if
-  available, otherwise 'cpu'
+  torch device to use, e.g.: `'cpu'` or `'cuda:0'`. Default: `'mps'` if
+  available, otherwise `'cpu'`
 
 - no_hmm:
 
@@ -145,8 +146,8 @@ py_actinet(
 
   function that loads the forest Python package. By default, it uses
   `reticulate::py_import("actinet")` to import the package. If this
-  function has an args argument, the output of `pyenv_function` will be
-  re-assigned to args.
+  function has an `args` argument, the output of `pyenv_function` will
+  be re-assigned to `args`.
 
 - show:
 

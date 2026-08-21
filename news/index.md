@@ -2,8 +2,9 @@
 
 ## actinet 0.4.0
 
-- Added `py_require_actinet` and other reqs.
+- Added `py_require_actinet` and other requirements.
 - Added `py_actinet`.
+- Added to docs for DOI and spell check.
 
 ## actinet 0.3.0
 

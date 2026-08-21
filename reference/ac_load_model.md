@@ -27,7 +27,7 @@ ac_download_model(
 
 - classifier:
 
-  type of the model: either walmsley or willetts
+  type of the model: either `walmsley` or `willetts`
 
 - model_path:
 

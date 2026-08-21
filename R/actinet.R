@@ -91,12 +91,12 @@ actinet_minute = function(time_series) {
 #' @param sample_rate the sample rate of the data.  Set to `NULL`
 #' for `actinet` to try to guess this
 #' @param outdir folder location to save output files
-#' @param classifier Enter custom activity classifier file to use. Default: walmsley (Walmsley2020 annotations of activity intensity). Can also enter path to local classifier (.joblib.lzma) file.
+#' @param classifier Enter custom activity classifier file to use. Default: `walmsley` (Walmsley (2020) <doi:10.1136/bjsports-2021-104050> annotations of activity intensity). Can also enter path to local classifier (`.joblib.lzma`) file.
 #' @param no_hmm Disable HMM post-processing
 #' @param require_sleep_above Require sleep blocks to exceed a minimum duration, otherwise be classified as sedentary. Pass values as strings, e.g.: '2H', '30min'. Default: None (no requirement)
 #' @param single_sleep_block Recognize only one sleep block per day, all other sleep blocks will be converted to sedentary
 #' @param force_download  Force download of classifier file
-#' @param pytorch_device torch device to use, e.g.: 'cpu' or 'cuda:0'. Default: 'mps' if available, otherwise 'cpu'
+#' @param pytorch_device torch device to use, e.g.: `'cpu'` or `'cuda:0'`. Default: `'mps'` if available, otherwise `'cpu'`
 #' @param sample_rate Sample rate for measurement, otherwise inferred.
 #' @param exclude_first_last {first,last,both} Exclude first, last or both days of data. Default: None (no exclusion)
 #' @param exclude_wear_below Exclude days with wear time below threshold. Pass values as strings, e.g.: '12H', '30min'. Default: None (no exclusion)

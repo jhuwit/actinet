@@ -42,7 +42,7 @@ CWA, GT3X, and \code{GENEActiv} bin files}
 
 \item{outdir}{folder location to save output files}
 
-\item{classifier}{Enter custom activity classifier file to use. Default: walmsley (Walmsley2020 annotations of activity intensity). Can also enter path to local classifier (.joblib.lzma) file.}
+\item{classifier}{Enter custom activity classifier file to use. Default: \code{walmsley} (Walmsley (2020) \url{doi:10.1136/bjsports-2021-104050} annotations of activity intensity). Can also enter path to local classifier (\code{.joblib.lzma}) file.}
 
 \item{sample_rate}{Sample rate for measurement, otherwise inferred.}
 
@@ -50,7 +50,7 @@ CWA, GT3X, and \code{GENEActiv} bin files}
 re-used and not re-downloaded.  If \code{NULL}, will download to the
 temporary directory}
 
-\item{pytorch_device}{torch device to use, e.g.: 'cpu' or 'cuda:0'. Default: 'mps' if available, otherwise 'cpu'}
+\item{pytorch_device}{torch device to use, e.g.: \code{'cpu'} or \code{'cuda:0'}. Default: \code{'mps'} if available, otherwise \code{'cpu'}}
 
 \item{no_hmm}{Disable HMM post-processing}
 
@@ -85,8 +85,8 @@ for more possible codes. Default: '\%Y-\%m-\%d \%H:\%M:\%S.\%f' (e.g. '2023-10-0
 
 \item{pyenv_function}{function that loads the forest Python package.
 By default, it uses  \code{reticulate::py_import("actinet")} to import
-the package. If this function has an args argument, the output of
-\code{pyenv_function} will be re-assigned to args.}
+the package. If this function has an \code{args} argument, the output of
+\code{pyenv_function} will be re-assigned to \code{args}.}
 
 \item{show}{Logical, whether to show the standard output on the
 screen while the child process is running, passed to \code{\link[callr:r]{callr::r()}}}

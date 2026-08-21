@@ -27,7 +27,7 @@ check_versions = function(x) {
 
 #' Load Actinet Model
 #'
-#' @param classifier type of the model: either walmsley or willetts
+#' @param classifier type of the model: either `walmsley` or `willetts`
 #' @param check_md5 Do a MD5 checksum on the file
 #' @param force_download force a download of the model, even if the file
 #' exists

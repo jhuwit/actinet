@@ -24,7 +24,7 @@ ac_download_model(
 )
 }
 \arguments{
-\item{classifier}{type of the model: either walmsley or willetts}
+\item{classifier}{type of the model: either \code{walmsley} or \code{willetts}}
 
 \item{model_path}{the file path to the model.  If on disk, this can be
 re-used and not re-downloaded.  If \code{NULL}, will download to the

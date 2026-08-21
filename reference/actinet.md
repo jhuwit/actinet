@@ -1,0 +1,202 @@
+# Run Actinet Model on Data
+
+Run Actinet Model on Data
+
+Run `actinet` with Python
+
+## Usage
+
+``` r
+actinet(
+  file,
+  outdir = tempfile(),
+  classifier = NULL,
+  sample_rate = NULL,
+  model_path = NULL,
+  pytorch_device = NULL,
+  no_hmm = FALSE,
+  require_sleep_above = NULL,
+  single_sleep_block = FALSE,
+  force_download = FALSE,
+  exclude_first_last = NULL,
+  exclude_wear_below = NULL,
+  csv_start_row = NULL,
+  csv_txyz = NULL,
+  csv_txyz_idxs = NULL,
+  csv_date_format = NULL,
+  calibration_stdtol_min = NULL,
+  plot_activity = FALSE,
+  cache_classifier = FALSE,
+  verbose = TRUE
+)
+
+py_actinet(
+  ...,
+  pyenv_function = function() {
+     actinet::py_require_actinet()
+ },
+  show = TRUE
+)
+```
+
+## Arguments
+
+- file:
+
+  accelerometry file to process, including CSV, CWA, GT3X, and
+  `GENEActiv` bin files
+
+- outdir:
+
+  folder location to save output files
+
+- classifier:
+
+  Enter custom activity classifier file to use. Default: walmsley
+  (Walmsley2020 annotations of activity intensity). Can also enter path
+  to local classifier (.joblib.lzma) file.
+
+- sample_rate:
+
+  Sample rate for measurement, otherwise inferred.
+
+- model_path:
+
+  the file path to the model. If on disk, this can be re-used and not
+  re-downloaded. If `NULL`, will download to the temporary directory
+
+- pytorch_device:
+
+  torch device to use, e.g.: 'cpu' or 'cuda:0'. Default: 'mps' if
+  available, otherwise 'cpu'
+
+- no_hmm:
+
+  Disable HMM post-processing
+
+- require_sleep_above:
+
+  Require sleep blocks to exceed a minimum duration, otherwise be
+  classified as sedentary. Pass values as strings, e.g.: '2H', '30min'.
+  Default: None (no requirement)
+
+- single_sleep_block:
+
+  Recognize only one sleep block per day, all other sleep blocks will be
+  converted to sedentary
+
+- force_download:
+
+  Force download of classifier file
+
+- exclude_first_last:
+
+  first,last,both Exclude first, last or both days of data. Default:
+  None (no exclusion)
+
+- exclude_wear_below:
+
+  Exclude days with wear time below threshold. Pass values as strings,
+  e.g.: '12H', '30min'. Default: None (no exclusion)
+
+- csv_start_row:
+
+  Row number to start reading a CSV file. Default: 1 (First row)
+
+- csv_txyz:
+
+  CSV_TXYZ Column names for time, x, y, z in CSV files. Comma\_
+  separated string. Default: 'time,x,y,z'
+
+- csv_txyz_idxs:
+
+  Column indices for time,x,y,z (0_indexed, e.g., '0,1,2,3'). Overrides
+  csv_txyz.
+
+- csv_date_format:
+
+  Date time format for csv file when reading a csv file. See
+  <https://docs.python.org/3/library/datetime.html#strftime_and_strptime_format_codes>
+  for more possible codes. Default: '%Y-%m-%d %H:%M:%S.%f' (e.g.
+  '2023-10-01 12:34:56.789')
+
+- calibration_stdtol_min:
+
+  Minimum standard deviation tolerance (g) for detecting stationary
+  periods for calibration. Default: None
+
+- plot_activity:
+
+  Plot the predicted activity labels
+
+- cache_classifier:
+
+  Download and cache classifier file and model modules for offline usage
+
+- verbose:
+
+  print diagnostic messages
+
+- ...:
+
+  arguments to pass to actinet
+
+- pyenv_function:
+
+  function that loads the forest Python package. By default, it uses
+  `reticulate::py_import("actinet")` to import the package. If this
+  function has an args argument, the output of `pyenv_function` will be
+  re-assigned to args.
+
+- show:
+
+  Logical, whether to show the standard output on the screen while the
+  child process is running, passed to
+  [`callr::r()`](https://callr.r-lib.org/reference/r.html)
+
+## Value
+
+A list of the results (`data.frame`), summary of the results, adjusted
+summary of the results, and information about the data.
+
+## Examples
+
+``` r
+actinet_check_result = function() {
+  res = try({suppressWarnings(actinet_check())})
+  if (inherits(res, "try-error")) {
+    res = FALSE
+  }
+  res
+}
+# \donttest{
+  file = system.file("extdata/P30_wrist100.csv.gz", package = "actinet")
+  if (actinet_check_result()) {
+    out = try({actinet(file = file)})
+    if (!inherits(out, "try-error")) {
+      data = readr::read_csv(out$outfiles[1])
+      daily_data = readr::read_csv(out$outfiles[3])
+    }
+  }
+#> Downloading uv...
+#> Done!
+#> Checking Data
+#> Rows: 60 Columns: 6
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> dbl  (5): acc, light, moderate-vigorous, sedentary, sleep
+#> dttm (1): time
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> Rows: 1 Columns: 13
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr   (1): Filename
+#> dbl  (11): WearTime(hours), ENMO(mg), ENMO Adjusted(mg), Light(hours), Moder...
+#> date  (1): Date
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# }
+```
